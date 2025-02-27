@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Farmer Produce Availability Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #d4edda;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            overflow: hidden;
+            position: relative;
+        }
+        .container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 10px;
+            width: 65%;
+            height: 70vh;
+            overflow-y: auto;
+            box-shadow: 0px 0px 10px #888;
+            position: relative;
+            z-index: 3;
+        }
+        h2 {
+            text-align: center;
+            color: #2d572c;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-top: 10px;
+        }
+        input, select, button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+        }
+        .produce-entry {
+            background: #f4f4f4;
+            padding: 10px;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+		.quantity-container {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+        .quantity-container input {
+            width: 70%;
+        }
+        .quantity-container select {
+            width: 30%;
+        }
+        .remove-btn {
+            background: red;
+            color: white;
+            margin-top: 10px;
+            cursor: pointer;
+        }
+        .submit-btn {
+            background: green;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            margin-top: 15px;
+        }
+        .success-message {
+            display: none;
+            background: #4CAF50;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 5px;
+        }
+		.background-draw {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 30vh;
+            background: linear-gradient(to top, #4a772f, #6a994e);
+            clip-path: polygon(0% 100%, 100% 100%, 100% 85%, 95% 88%, 92% 84%, 89% 87%, 85% 82%, 82% 86%, 78% 79%, 75% 84%, 70% 77%, 65% 82%, 60% 75%, 55% 80%, 50% 73%, 45% 78%, 40% 71%, 35% 76%, 30% 69%, 25% 74%, 20% 68%, 15% 72%, 10% 66%, 5% 70%, 0% 65%);
+            z-index: 1;
+        }
+        .crops {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-around;
+            align-items: center;
+            pointer-events: none;
+            z-index: 1;
+        }
+        .crop {
+            width: 80px;
+            height: 100px;
+            background: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64"><rect x="28" y="48" width="8" height="16" fill="%238B5E3C"/><ellipse cx="32" cy="40" rx="12" ry="16" fill="%236A994E"/><circle cx="32" cy="28" r="6" fill="%23FFD700"/></svg>') no-repeat center center;
+            background-size: contain;
+            position: absolute;
+        }
+        .crop:nth-child(1) { top: 10%; left: 5%; }
+        .crop:nth-child(2) { top: 30%; left: 5%; }
+        .crop:nth-child(3) { top: 50%; left: 5%; }
+        .crop:nth-child(4) { top: 70%; left: 5%; }
+        .crop:nth-child(5) { top: 10%; right: 5%; }
+        .crop:nth-child(6) { top: 30%; right: 5%; }
+		.crop:nth-child(7) { top: 50%; right: 5%; }
+        .crop:nth-child(8) { top: 70%; right: 5%; }
+		.crop:nth-child(9) { top: -5%; right: 12%; }
+		.crop:nth-child(10) { top: -5%; right: 24%; }
+		.crop:nth-child(11) { top: -5%; right: 36%; }
+		.crop:nth-child(12) { top: -5%; right: 48%; }
+		.crop:nth-child(13) { top: -5%; right: 60%; }
+		.crop:nth-child(14) { top: -5%; right: 72%; }
+		.crop:nth-child(15) { top: -5%; right: 84%; }
+		
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="success-message" id="success-message">Form submitted successfully!</div>
+        <h2>Farmer Produce Availability Form</h2>
+        <form id="farmerForm">
+            <label>Farm Name <span style='color: red;'>*</span> <input type="text" id="farmName" required pattern="[A-Za-z\s]+"></label>
+            <label>First Name <span style='color: red;'>*</span> <input type="text" id="firstName" required pattern="[A-Za-z\s]+"></label>
+            <label>Last Name <span style='color: red;'>*</span> <input type="text" id="lastName" required pattern="[A-Za-z\s]+"></label>
+            <label>Phone No. <span style='color: red;'>*</span> <input type="text" id="phone" required pattern="\d+"></label>
+            <label>Alternate Phone No. <span style='color: red;'>*</span> <input type="text" id="altPhone" required pattern="\d+"></label>
+            <label>New/Returning Farmer? <span style='color: red;'>*</span> <select id="farmerType" required>
+                <option value="">-Select-</option>
+				<option value="New">New</option>
+                <option value="Returning">Returning</option>
+            </select></label>
+            <label>Upload Photo <span style='color: red;'>*</span> <input type="file" id="photo" multiple required></label>
+            
+            <button type="button" onclick="addProduceEntry()">Add Produce</button>
+            <div id="produceContainer"></div>
+            
+            <button type="submit" class="submit-btn">Submit</button>
+        </form>
+    </div>
+    <div class="crops">
+        <div class="crop"></div>
+        <div class="crop"></div>
+        <div class="crop"></div>
+        <div class="crop"></div>
+        <div class="crop"></div>
+        <div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+		<div class="crop"></div>
+    </div>
+	<div class="background-draw"></div>
+
+    <script>
+        const cropCodes = {
+            "Tomato": "TOMA", "Yellow Onion": "YONI", "Red Onion": "RONI", "Garlic": "GARL", "Ginger": "GING",
+            "Collards": "COLL", "Mustards": "MUST", "Sweet Potato": "SPOT", "Red Bell Pepper": "RBPE", "Serrano Pepper": "SPEP",
+            "Jalapeño Pepper": "JPEP", "Habanero Pepper": "HPEP", "Scotch Bonnet Pepper": "SBPE", "Corn": "CORN", "Black Beans": "BBEA",
+            "Black Eyed Peas": "BEPE", "Cilantro": "HCIL", "Lemon Grass": "LEMO", "Celery": "CELE", "Pumpkin": "PUMP", "Parsley": "HPAR",
+            "Leeks": "LEEK", "Shallots": "SHAL", "Green Onion": "GONI", "Basil": "HBAS", "Cayenne Pepper": "CPEP"
+        };
+        function addProduceEntry() {
+            const produceContainer = document.getElementById('produceContainer');
+            const div = document.createElement('div');
+            div.classList.add('produce-entry');
+            div.innerHTML = `
+                <label>Crop Name <span style='color: red;'>*</span> <select onchange="checkOtherCrop(this)" required><option value="">-Select-</option>
+                    ${Object.keys(cropCodes).map(crop => `<option value="${crop}">${crop}</option>`).join('')}
+                    <option value="Other">Other</option>
+                </select></label>
+                <div class="other-crop" style="display:none;"><label>Enter Other Crop Name <span style='color: red;'>*</span> <input type="text"></label></div>
+                <label>Harvest Date <span style='color: red;'>*</span> <input type="date" required onchange="generateProduceID(this)"></label>
+                <label>Produce ID <span style='color: red;'>*</span> <input type="text" readonly onclick="generateProduceID(this)"></label>
+                <label>Quantity <span style='color: red;'>*</span> <div class="quantity-container"> <input type="number" required> <select required><option>lbs</option><option>counts</option><option>bunches</option></select></div></label>
+                <label>Quality <span style='color: red;'>*</span> <select required><option value="">-Select-</option><option>Excellent</option><option>Adequate</option><option>Poor</option></select></label>
+                <label>Requires Refrigeration? <span style='color: red;'>*</span> <select required><option value="">-Select-</option><option>Yes</option><option>No</option></select></label>
+                <button type="button" class="remove-btn" onclick="this.parentElement.remove()">Delete Produce</button>
+            `;
+            produceContainer.appendChild(div);
+        }
+        function checkOtherCrop(select) {
+            const otherCropDiv = select.parentElement.nextElementSibling;
+            otherCropDiv.style.display = select.value === "Other" ? "block" : "none";
+        }
+        function generateProduceID(input) {
+            const parent = input.parentElement.parentElement;
+            const crop = parent.querySelector("select").value;
+            const date = parent.querySelector("input[type='date']").value;
+            if (crop && date) {
+                const cropCode = crop === "Other" ? parent.querySelector(".other-crop input").value.substring(0, 4).toUpperCase() : cropCodes[crop];
+                parent.querySelector("input[readonly]").value = `${cropCode}-${date.replace(/-/g, '')}`;
+            }
+        }
+    </script>
+</body>
+</html>
